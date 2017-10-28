@@ -12,9 +12,9 @@
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.password" value="dacs2015"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost/dacs2015"/>
-            <property name="hibernate.connection.username" value="dacs2015"/>
+            <property name="hibernate.connection.password" value="dacs"/>
+            <property name="hibernate.connection.url" value="jdbc:mysql://localhost/dacs"/>
+            <property name="hibernate.connection.username" value="dacs"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <!-- 
             <property name="hibernate.c3p0.min_size" value="5"/>
