@@ -13,8 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package ar.edu.utn.frre.dacs.model;
+
 /**
+ * Sexo de las Personas F&iacute;sicas.
  * @author Dr. Jorge Eduardo Villaverde
- *
+ * @version 1.0
+ * @since 1.0
  */
-package ar.edu.utn.frre.dacs.persistencia.jpa.model.constraints;
+public enum Sexo {
+    /**
+     * Sexo Masculino. 
+     */
+    M,
+    
+    /**
+     * Sexo Femenino. 
+     */
+    F;
+}

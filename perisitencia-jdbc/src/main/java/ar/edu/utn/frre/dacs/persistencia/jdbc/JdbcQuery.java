@@ -106,7 +106,7 @@ public class JdbcQuery {
 	}
 
 	private static String createDatabaseUrl() {
-		return "jdbc:mysql://localhost/dacs";
+		return "jdbc:mysql://localhost/dacs?useSSL=false";
 	}
 
 }

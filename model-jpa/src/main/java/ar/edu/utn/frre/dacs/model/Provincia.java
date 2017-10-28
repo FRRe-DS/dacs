@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.persistencia.jpa.model;
+package ar.edu.utn.frre.dacs.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,7 +26,7 @@ import javax.validation.constraints.Size;
  *
  */
 @Entity
-@Table(name="provincia", schema="dacs2015")
+@Table(name="provincia", schema="dacs")
 public class Provincia extends BaseEntity {
 
 	/**

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.persistencia.jpa.model;
+package ar.edu.utn.frre.dacs.model;
 
 import java.util.List;
 
@@ -33,7 +33,7 @@ import javax.validation.constraints.Size;
  *
  */
 @Entity
-@Table(name="direccion", schema="dacs2015")
+@Table(name="direccion", schema="dacs")
 public class Direccion extends BaseEntity {
 
 	/**

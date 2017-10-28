@@ -19,6 +19,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 		</dependency>
+		
+		<!-- Modelo -->
+		<dependency>
+			<groupId>ar.edu.utn.frre.dacs</groupId>
+			<artifactId>model-jpa</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.persistencia.jpa.model;
+package ar.edu.utn.frre.dacs.model;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -32,7 +32,7 @@ import javax.validation.constraints.Size;
  *
  */
 @Entity
-@Table(name="calle", schema="dacs2015")
+@Table(name="calle", schema="dacs")
 public class Calle extends BaseEntity {
 
 	/**

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ar.edu.utn.frre</groupId>
@@ -14,32 +15,37 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<javaee.version>7.0</javaee.version>
-		
+
 		<!-- SLF4J -->
 		<slf4j.version>1.7.25</slf4j.version>
 
 		<!-- Log4J -->
 		<log4j.version>1.2.17</log4j.version>
-		
+
 		<!-- JUnit -->
 		<junit.version>4.12</junit.version>
-		
+
 		<!-- MySQL -->
 		<mysql.version>6.0.6</mysql.version>
-		
+
 		<!-- Hibernate -->
 		<hibernate.version>5.2.12.Final</hibernate.version>
 		<hibernate.validator.version>5.1.3.Final</hibernate.validator.version>
-		
+
+		<!-- Flyway DB -->
+		<flyway.version>4.2.0</flyway.version>
+
 		<maven.compiler.version>3.7.0</maven.compiler.version>
 		<maven.jrebel.version>1.1.7</maven.jrebel.version>
 	</properties>
-  
+
 	<modules>
+		<module>model-jpa</module>
 		<module>perisitencia-jdbc</module>
 		<module>perisitencia-jpa</module>
+		<module>dao-api</module>
 	</modules>
-  
+
 	<developers>
 		<developer>
 			<id>jorgevillaverde</id>
@@ -80,7 +86,7 @@
 		<url>https://github.com/jorgevillaverde/dacs</url>
 		<tag>dacs</tag>
 	</scm>
-	
+
 	<!-- Organization -->
 	<organization>
 		<name>Universidad Tecnólgica Nacional - Facultada Regional Resistencia</name>
@@ -104,50 +110,50 @@
 				<version>${javaee.version}</version>
 			</dependency>
 
-			<!-- MySQL Driver --> 
+			<!-- MySQL Driver -->
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysql.version}</version>
 			</dependency>
-			
+
 			<!-- Loggin -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
-	
+
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>${slf4j.version}</version>
 			</dependency>
-			
-			<!-- Hibernate -->			
+
+			<!-- Hibernate -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>${hibernate.version}</version>
 			</dependency>
-			
+
 			<!-- Hibernate Validator -->
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-validator</artifactId>
 				<version>${hibernate.validator.version}</version>
-			</dependency>			
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
 	<dependencies>
-	  <!-- JUnit -->
+		<!-- JUnit -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -157,27 +163,7 @@
 	</dependencies>
 
 	<build>
-    <finalName>${project.artifactId}</finalName>
-    
-		<plugins>
-		  <!--Source Plugin
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		-->			
-		</plugins>
-		
+		<finalName>${project.artifactId}</finalName>
 		<pluginManagement>
 			<plugins>
 				<!-- Compiler plugin -->
@@ -190,27 +176,47 @@
 						<encoding>UTF-8</encoding>
 					</configuration>
 				</plugin>
-				
-	            <!-- JRebel Plugin-->
-	            <plugin>
-	                <groupId>org.zeroturnaround</groupId>
-	                <artifactId>jrebel-maven-plugin</artifactId>
-	                <version>${maven.jrebel.version}</version>
-	                <configuration>
-	                    <addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
-	                    <alwaysGenerate>true</alwaysGenerate>
-	                    <showGenerated>true</showGenerated>
-	                </configuration>
-	                <executions>
-	                    <execution>
-	                        <id>generate-rebel-xml</id>
-	                        <phase>process-resources</phase>
-	                        <goals>
-	                            <goal>generate</goal>
-	                        </goals>
-	                    </execution>
-	                </executions>
-	            </plugin>				
+
+				<!-- JRebel Plugin -->
+				<plugin>
+					<groupId>org.zeroturnaround</groupId>
+					<artifactId>jrebel-maven-plugin</artifactId>
+					<version>${maven.jrebel.version}</version>
+					<configuration>
+						<addResourcesDirToRebelXml>true</addResourcesDirToRebelXml>
+						<alwaysGenerate>true</alwaysGenerate>
+						<showGenerated>true</showGenerated>
+					</configuration>
+					<executions>
+						<execution>
+							<id>generate-rebel-xml</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>generate</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+
+				<!-- Flyway DB -->
+				<plugin>
+					<groupId>org.flywaydb</groupId>
+					<artifactId>flyway-maven-plugin</artifactId>
+					<version>${flyway.version}</version>
+					<configuration>
+						<url>${flyway.dacs.url}</url>
+						<user>${flyway.dacs.user}</user>
+						<password>${flyway.dacs.password}</password>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>mysql</groupId>
+							<artifactId>mysql-connector-java</artifactId>
+							<version>${mysql.version}</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>

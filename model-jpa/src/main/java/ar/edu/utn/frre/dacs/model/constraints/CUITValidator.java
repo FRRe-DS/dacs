@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.persistencia.jpa.model.constraints;
+package ar.edu.utn.frre.dacs.model.constraints;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import ar.edu.utn.frre.dacs.persistencia.jpa.model.Sexo;
+import ar.edu.utn.frre.dacs.model.Sexo;
 
 /**
  * <h2>Validador de CUIT/CUIL.</h2> Valida que el CUIT/CUIL posea un formato

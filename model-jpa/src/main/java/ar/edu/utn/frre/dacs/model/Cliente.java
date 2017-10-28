@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.persistencia.jpa.model;
+package ar.edu.utn.frre.dacs.model;
 
 import java.util.Date;
 import java.util.List;
@@ -37,7 +37,7 @@ import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import ar.edu.utn.frre.dacs.persistencia.jpa.model.constraints.CUIT;
+import ar.edu.utn.frre.dacs.model.constraints.CUIT;
 
 /**
  * @author Dr. Jorge Eduardo Villaverde
@@ -45,7 +45,7 @@ import ar.edu.utn.frre.dacs.persistencia.jpa.model.constraints.CUIT;
  * @since 1.0
  */
 @Entity
-@Table(name="cliente", schema="dacs2015")
+@Table(name="cliente", schema="dacs")
 public class Cliente extends BaseEntity {
 
 	/**
@@ -65,7 +65,7 @@ public class Cliente extends BaseEntity {
     @Min(1)
     @Max(999999999999999L)
     @Column(name = "cuit_cuil", nullable = false)
-    @CUIT
+    @CUIT()
     private Long cuitCuil;
 
     @NotNull

@@ -25,7 +25,7 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ar.edu.utn.frre.dacs.persistencia.jpa.model.Provincia;
+import ar.edu.utn.frre.dacs.model.Provincia;
 
 /**
  * @author Dr. Jorge Eduardo Villaverde

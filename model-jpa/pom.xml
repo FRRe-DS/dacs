@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>ar.edu.utn.frre.dacs.perisitencia</groupId>
-	<artifactId>perisitencia-jpa</artifactId>
+	<groupId>ar.edu.utn.frre.dacs</groupId>
+	<artifactId>model-jpa</artifactId>
 	<packaging>jar</packaging>
-	<name>Persistencia: JPA</name>
+	<name>ORM con JPA</name>
 
 	<parent>
 		<groupId>ar.edu.utn.frre</groupId>
@@ -45,38 +45,25 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
 		</dependency>
-		
-		<!-- Modelo -->
-		<dependency>
-			<groupId>ar.edu.utn.frre.dacs</groupId>
-			<artifactId>model-jpa</artifactId>
-			<version>${project.version}</version>
-		</dependency>		
 	</dependencies>
-	
 	<build>
 		<plugins>
+			<!-- Flyway DB -->
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
 				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>ar.edu.utn.frre.dacs.persistencia.jpa.JpaDemo</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
+					<url>${flyway.dacs.url}</url>
+					<user>${flyway.dacs.user}</user>
+					<password>${flyway.dacs.password}</password>
 				</configuration>
-				<executions>
-					<execution>
-						<id>make-assembly</id> <!-- this is used for inheritance merges -->
-						<phase>package</phase> <!-- bind to the packaging phase -->
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>mysql</groupId>
+						<artifactId>mysql-connector-java</artifactId>
+						<version>${mysql.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
