@@ -20,6 +20,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Dr. Jorge Eduardo Villaverde
@@ -27,6 +29,7 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name="provincia", schema="dacs")
+@XmlRootElement(name = "provincia")
 public class Provincia extends BaseEntity {
 
 	/**
@@ -43,6 +46,7 @@ public class Provincia extends BaseEntity {
 
 	// Getters/Setters --------------------------------------------------------
 	
+	@XmlElement
 	public String getNombre() {
 		return nombre;
 	}

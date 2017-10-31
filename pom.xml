@@ -12,6 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<javaee.version>7.0</javaee.version>
@@ -44,6 +45,10 @@
 		<module>perisitencia-jdbc</module>
 		<module>perisitencia-jpa</module>
 		<module>dao-api</module>
+		<!-- 
+		<module>jax-ws-server</module>
+		 -->
+		<module>jax-rs-server</module>
 	</modules>
 
 	<developers>
