@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 #{title}: #{calle.nombre}
+  p= calle.lifespan
+  
+  p ¿Realmente quiere borrar esta calle?
+    
+  form(method='POST' action='')
+    div.form-group
+      input#calleid.form-control(type='hidden',name='calleid', required='true', value=calle._id )
+
+    button.btn.btn-primary(type='submit') Delete

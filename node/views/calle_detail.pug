@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+  h1 Calle: #{calle.nombre}
+  
+  hr
+  p
+    a(href=calle.url+'/delete') Borrar calle
+  p
+    a(href=calle.url+'/update') Actualizar calle
