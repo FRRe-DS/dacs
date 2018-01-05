@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  p Estos es Node.JS.
+
+  if error
+    p Error getting dynamic content.
+  else
+    p Estos son los datos almacenados en MongoDB:
+
+    ul
+      li #[strong Clientes:] !{data.cliente_count}
+      li #[strong Calles:] !{data.calle_count}
+      li #[strong Direcciones:] !{data.direccion_count} 
+      li #[strong Provincias:] !{data.provincia_count}
