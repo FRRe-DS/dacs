@@ -4,3 +4,9 @@ matrix:
       jdk: oraclejdk8
       before_script:
         - cd java
+    - language: node_js
+      node_js:
+        - "iojs"
+        - "7"
+      before_script:
+        - cd node
