@@ -10,6 +10,8 @@ var mongoose = require('mongoose');
 var index = require('./routes/index');
 var cliente = require('./routes/cliente');
 var calle = require('./routes/calle');
+var direccion = require('./routes/direccion');
+var provincia = require('./routes/provincia');
 
 var app = express();
 
@@ -28,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/cliente', cliente);
 app.use('/calle', calle);
+app.use('/direccion', direccion);
+app.use('/provincia', provincia);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

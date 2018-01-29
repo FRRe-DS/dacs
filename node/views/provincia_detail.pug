@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+  h1 Provincia: #{provincia.nombre}
+  
+  hr
+  p
+    a(href=provincia.url+'/delete') Borrar provincia
+  p
+    a(href=provincia.url+'/update') Actualizar provincia

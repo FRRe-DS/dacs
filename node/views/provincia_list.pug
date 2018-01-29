@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  
+  ul
+  each provincia in provincia_list
+    li 
+      a(href=provincia.url) #{provincia.nombre} 
+
+  else
+    li No hay provincias.

@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='nombre') Calle:
+      input#name.form-control(type='text', placeholder='Ingrese la provincia.' name='nombre' value=(undefined===provincia ? '' : provincia.nombre))
+    button.btn.btn-primary(type='submit') Guardar
+
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg

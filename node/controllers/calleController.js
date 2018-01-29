@@ -127,10 +127,34 @@ exports.calle_delete_post = function(req, res, next) {
 };
 // Display Calle update form on GET
 exports.calle_update_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: Calle update GET');
+  async.parallel({
+      calle: function(callback) {
+          Calle.findById(req.params.id).exec(callback)
+      },
+  }, function(err, results) {
+      if (err) { return next(err); }
+      if (results.calle==null) { // No results.
+          res.redirect('/calle');
+      }
+      // Successful, so render.
+      res.render('calle_form', { title: 'Editar Calle', calle: results.calle } );
+  });
 };
 
 // Handle Calle update on POST
 exports.calle_update_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Calle update POST');
+  async.parallel({
+      calle: function(callback) {
+        Calle.findById(req.body.calleid).exec(callback)
+      },
+  }, function(err, results) {
+      if (err) { return next(err); }
+      // Success
+
+      Calle.findByIdAndUpdate(req.body.calleid, function updateCalle(err) {
+        if (err) { return next(err); }
+          // Success - go to calle list
+          res.redirect('/calle')
+        })
+  });
 };
