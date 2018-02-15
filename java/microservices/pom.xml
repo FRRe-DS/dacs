@@ -29,6 +29,7 @@
 		<module>eureka-server</module>
 		<module>service-a</module>
 		<module>service-b</module>
+		<module>greeting</module>
 		<module>api-gateway</module>
 		<module>zipkin-server</module>
 	</modules>

@@ -3,7 +3,7 @@ info:
 
 server:
   port: ${PORT:8765}
-   
+
 logging:
   level:
       - ".=info"
@@ -27,6 +27,9 @@ zuul:
     service-b:
       path: /service-b/**
       serviceId: service-b
+    compose-service:
+      path: /greeting/**
+      serviceId: greeting
 
 ribbon:
   eureka:
@@ -37,4 +40,3 @@ eureka:
     serviceUrl:
       defaultZone: http://user:password@${EUREKA_SERVER:eureka-server}:8761/eureka/
     registerWithEureka: false
-      

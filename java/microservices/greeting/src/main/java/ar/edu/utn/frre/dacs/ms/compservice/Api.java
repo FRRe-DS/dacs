@@ -13,34 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.ms.serviceb;
+package ar.edu.utn.frre.dacs.ms.compservice;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
-import org.springframework.context.annotation.Bean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@EnableEurekaClient
-@EnableDiscoveryClient
-@SpringBootApplication
 @RestController
-public class ServiceBApplication {
-		
-	public static void main(String[] args) {
-		SpringApplication.run(ServiceBApplication.class, args);
-	}
+public class Api {
 	
-	@Bean
-	public AlwaysSampler defaultSampler() {
-	  return new AlwaysSampler();
-	}
+	protected Logger logger = LoggerFactory.getLogger(Api.class.getName());
+	
+	@Autowired
+	private ServiceAClient serviceAClient;
+	
+	@Autowired
+	private ServiceBClient serviceBClient;
 
-	@RequestMapping("/service-b")
+	@RequestMapping("/greeting")
 	public String findAll() {
-		return "World!";
-	}		
+		logger.info("Getting greetings.");
+		
+		StringBuilder builder = new StringBuilder();
+		
+		builder.append("Greenting from A: ");
+		builder.append(serviceAClient.serviceAGreeting());
+		builder.append("\n");
+		builder.append("Greenting from B: ");
+		builder.append(serviceBClient.serviceBGreeting());
+		
+		return builder.toString();
+	}	
+	
 }

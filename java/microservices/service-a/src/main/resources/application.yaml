@@ -32,6 +32,7 @@ logging:
       - "ar.com.nbch.ms.servicea=debug"
       - "org.springframework=info"
 
+# Ribbon is enabled
 ribbon:
   eureka:
     enabled: true

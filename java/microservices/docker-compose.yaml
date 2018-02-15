@@ -47,6 +47,24 @@ services:
     networks:
       - dacs-ms
 
+  greeting:
+    build:
+      context:
+        ./greeting
+    ports:
+      - 8085:8085
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+      - service-a
+      - service-b
+    links:
+      - eureka-server
+      - service-a
+      - service-b
+    networks:
+      - dacs-ms
+
   # Zuul API Gateway
   api-gateway:
     build:
@@ -60,6 +78,7 @@ services:
     depends_on:
       - service-a
       - service-b
+      - greeting
 
   # Zipkin
   zipkin-server:
