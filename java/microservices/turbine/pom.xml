@@ -4,25 +4,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>ar.edu.utn.frre.dacs.ms</groupId>
-	<artifactId>eureka-server</artifactId>
+	<artifactId>turbine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-
-	<name>Netflix OSS Eureka Server</name>
-	<description>Service Registration and Discovery</description>
+	<description>Netfix OSS Turbine</description>
+	<name>Turbine</name>
 
 	<parent>
 		<groupId>ar.edu.utn.frre.dacs</groupId>
-    <artifactId>ms</artifactId>
-    <version>1.0-SNAPSHOT</version>
+		<artifactId>ms</artifactId>
+		<version>1.0-SNAPSHOT</version>
 	</parent>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-eureka-server</artifactId>
+			<artifactId>spring-cloud-starter-turbine</artifactId>
 		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

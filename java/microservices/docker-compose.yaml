@@ -91,6 +91,34 @@ services:
     networks:
       - dacs-ms
 
+  # Turbine
+  turbine:
+    build:
+      context:
+        ./turbine
+    ports:
+      - 8082:8082
+    restart: unless-stopped
+    networks:
+      - dacs-ms
+    links:
+      - eureka-server
+      - service-a
+      - service-b
+
+  # Hystrix Dashboard
+  hystrix-dashboard:
+    build:
+      context:
+        ./hystrix-dashboard
+    ports:
+      - 8090:8090
+    restart: unless-stopped
+    networks:
+      - dacs-ms
+    links:
+      - turbine
+      
 networks:
   dacs-ms:
     driver: bridge

@@ -1,0 +1,29 @@
+version: '3'
+services:
+  eureka-server:
+    build:
+      context:
+        ./eureka-server
+    ports:
+      - 8761:8761
+    restart: unless-stopped
+    networks:
+      - loan-net
+
+  client-service:
+    build:
+      context:
+        ./client-service
+    ports:
+      - 8082:8082
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+    links:
+      - eureka-server
+    networks:
+      - loan-net
+    
+networks:
+  loan-net:
+    driver: bridge
