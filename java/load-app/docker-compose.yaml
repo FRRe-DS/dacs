@@ -21,9 +21,20 @@ services:
       - eureka-server
     links:
       - eureka-server
+      - mysql01
     networks:
       - loan-net
-    
+
+  mysql01:
+    image: mysql:latest
+    networks:
+      - loan-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=ThePassword
+      - MYSQL_DATABASE=client-db
+    volumes:
+      - "./data/client/db:/var/lib/mysql"
+      - "./data/client/V1_0__DDL.sql:/docker-entrypoint-initdb.d/V1_0__DDL.sql"
 networks:
   loan-net:
     driver: bridge

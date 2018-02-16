@@ -15,20 +15,31 @@
  */
 package ar.edu.utn.frre.dacs.loan.client;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import ar.edu.utn.frre.dacs.loan.client.dao.ClientRepository;
+import ar.edu.utn.frre.dacs.loan.client.model.Client;
+
 @RestController
+@RequestMapping("/client")
 public class Api {
 
 	protected Logger logger = LoggerFactory.getLogger(Api.class.getName());
 	
-	@RequestMapping("/greeting-a")
-	public String findAll() {
-		logger.info("Service A: " + System.currentTimeMillis());
+	@Autowired
+	private ClientRepository repository;
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public List<Client> findAll() {
+		logger.info("Client Service: " + System.currentTimeMillis());
 		
-		return "Hello from Service A";
+		return repository.findAll();
 	}		
 }

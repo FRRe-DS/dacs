@@ -19,6 +19,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 public class Client implements Serializable {
@@ -30,7 +31,8 @@ public class Client implements Serializable {
 	
 	// Properties -------------------------------------------------------------
 	
-	private long id;
+	@Id
+	private Long id;
 	
 	private String firstName;
 	
@@ -40,11 +42,11 @@ public class Client implements Serializable {
 
 	// Getters/Setters --------------------------------------------------------
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
