@@ -28,6 +28,10 @@
 	<modules>
 		<module>eureka-server</module>
 		<module>client-service</module>
+		<module>savings-account-service</module>
+		<module>checking-account-service</module>
+		<module>loan-service</module>
+		<module>rating-service</module>
 	</modules>
 
 	<!-- Licenses -->

@@ -25,6 +25,21 @@ services:
     networks:
       - loan-net
 
+  savings-account-service:
+    build:
+      context:
+        ./savings-account-service
+    ports:
+      - 8083:8083
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+    links:
+      - eureka-server
+      - mysql02
+    networks:
+      - loan-net
+
   mysql01:
     image: mysql:latest
     networks:
@@ -35,6 +50,17 @@ services:
     volumes:
       - "./data/client/db:/var/lib/mysql"
       - "./data/client/V1_0__DDL.sql:/docker-entrypoint-initdb.d/V1_0__DDL.sql"
+
+  mysql02:
+    image: mysql:latest
+    networks:
+      - loan-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=ThePassword
+      - MYSQL_DATABASE=savings-account-db
+    volumes:
+      - "./data/savings/db:/var/lib/mysql"
+
 networks:
   loan-net:
     driver: bridge
