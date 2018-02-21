@@ -61,6 +61,59 @@ services:
     volumes:
       - "./data/savings/db:/var/lib/mysql"
 
+  # Zuul API Gateway
+  api-gateway:
+    build:
+      context:
+        ./api-gateway
+    ports:
+      - 8765:8765
+    restart: unless-stopped
+    networks:
+      - loan-net
+    depends_on:
+      - client-service
+      - savings-account-service
+
+  # Zipkin
+  zipkin-server:
+    build:
+      context:
+        ./zipkin-server
+    ports:
+      - 9411:9411
+    restart: unless-stopped
+    networks:
+      - loan-net
+
+  # Turbine
+  turbine:
+    build:
+      context:
+        ./turbine
+    ports:
+      - 8082:8082
+    restart: unless-stopped
+    networks:
+      - loan-net
+    links:
+      - eureka-server
+      - savings-account-service
+      - client-service
+
+  # Hystrix Dashboard
+  hystrix-dashboard:
+    build:
+      context:
+        ./hystrix-dashboard
+    ports:
+      - 8090:8090
+    restart: unless-stopped
+    networks:
+      - loan-net
+    links:
+      - turbine
+      
 networks:
   loan-net:
     driver: bridge

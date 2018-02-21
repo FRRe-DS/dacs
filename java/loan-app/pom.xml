@@ -29,9 +29,11 @@
 		<module>eureka-server</module>
 		<module>client-service</module>
 		<module>savings-account-service</module>
-		<module>checking-account-service</module>
-		<module>loan-service</module>
-		<module>rating-service</module>
+		<!-- module>checking-account-service</module -->
+		<module>api-gateway</module>
+		<module>hystrix-dashboard</module>
+		<module>turbine</module>
+		<module>zipkin-server</module>
 	</modules>
 
 	<!-- Licenses -->
