@@ -18,7 +18,7 @@ info:
 # give the application a name
 spring:
   application:
-    name: savings-account
+    name: savings-account-service
   jpa:
     show-sql: true
     ddl-auto: validate

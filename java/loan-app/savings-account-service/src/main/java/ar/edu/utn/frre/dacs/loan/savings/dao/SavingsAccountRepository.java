@@ -15,6 +15,8 @@
  */
 package ar.edu.utn.frre.dacs.loan.savings.dao;
 
+import java.util.Collection;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -22,5 +24,6 @@ import ar.edu.utn.frre.dacs.loan.savings.model.SavingsAccount;
 
 @Repository
 public interface SavingsAccountRepository extends JpaRepository<SavingsAccount, Long> {
-
+	
+	Collection<SavingsAccount> findByClientId(Long clientId);
 }
