@@ -19,7 +19,11 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 public class Client implements Serializable {
@@ -32,6 +36,7 @@ public class Client implements Serializable {
 	// Properties -------------------------------------------------------------
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
 	private String firstName;
@@ -74,4 +79,13 @@ public class Client implements Serializable {
 		this.dateOfBirth = dateOfBirth;
 	}
 
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this).
+			append("id", id).
+			append("firstName", firstName).
+			append("lastName", lastName).
+			append("dateOfBirth", dateOfBirth).
+			toString();
+	}	
 }
