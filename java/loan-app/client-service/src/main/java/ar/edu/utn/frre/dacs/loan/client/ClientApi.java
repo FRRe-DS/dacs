@@ -15,6 +15,7 @@
  */
 package ar.edu.utn.frre.dacs.loan.client;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -29,27 +30,31 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import ar.edu.utn.frre.dacs.loan.client.dao.ClientRepository;
 import ar.edu.utn.frre.dacs.loan.client.model.Client;
 
 @RestController
-public class Api {
+public class ClientApi {
 
-	protected Logger logger = LoggerFactory.getLogger(Api.class.getName());
+	protected Logger logger = LoggerFactory.getLogger(ClientApi.class.getName());
 	
 	@Autowired
 	private ClientRepository repository;
 	
+	@HystrixCommand(fallbackMethod = "defaultFindAll")
 	@RequestMapping(value = "/client", method = RequestMethod.GET)
 	@ResponseBody
-	public List<Client> findAll() {
+	public List<Client> findAllClients() {
 		logger.info("Returning all clients");
 		
 		return repository.findAll();
 	}
 	
+	@HystrixCommand(fallbackMethod = "defaultFindOne")
 	@RequestMapping(value = "/client/{clientId}", method = RequestMethod.GET) 
-	public ResponseEntity<?> findOne(
+	public ResponseEntity<?> findOneClient(
 			@PathVariable("clientId") Long id) {
 		logger.info("Returning client with id: " + id);
 		
@@ -124,4 +129,16 @@ public class Api {
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}	
+	
+	
+	// Fallback Methods -------------------------------------------------------
+	
+	public List<Client> defaultFindAll() {
+		return Collections.singletonList(Client.DEFAULT);
+	}
+	
+	public ResponseEntity<?> defaultFindOne(Long id) {
+		return new ResponseEntity<>(Client.DEFAULT, HttpStatus.OK);
+	}
+	
 }

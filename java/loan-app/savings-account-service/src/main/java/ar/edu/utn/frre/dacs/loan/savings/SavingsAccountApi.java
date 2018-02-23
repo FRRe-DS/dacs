@@ -15,7 +15,8 @@
  */
 package ar.edu.utn.frre.dacs.loan.savings;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,27 +30,40 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+
 import ar.edu.utn.frre.dacs.loan.savings.dao.SavingsAccountRepository;
+import ar.edu.utn.frre.dacs.loan.savings.dao.TransactionRepository;
 import ar.edu.utn.frre.dacs.loan.savings.model.SavingsAccount;
+import ar.edu.utn.frre.dacs.loan.savings.model.Transaction;
 
 @RestController
-public class Api {
+public class SavingsAccountApi {
 
-	protected Logger logger = LoggerFactory.getLogger(Api.class.getName());
+	protected Logger logger = LoggerFactory.getLogger(SavingsAccountApi.class.getName());
 
+	// Dependencies -----------------------------------------------------------
+	
 	@Autowired
 	private SavingsAccountRepository repository;
+	
+	@Autowired
+	private TransactionRepository txRepository;
+	
+	// Methods ----------------------------------------------------------------
 
+	@HystrixCommand(fallbackMethod = "defaultFindAll")
 	@RequestMapping(value = "/savings", method = RequestMethod.GET)
 	@ResponseBody
-	public List<SavingsAccount> findAll() {
-		logger.info("Returning all savins account");
+	public ResponseEntity<?> findAllSavingsAccounts() {
+		logger.info("Returning all savings account");
 		
-		return repository.findAll();
+		return new ResponseEntity<>(repository.findAll(), HttpStatus.OK);
 	}
 	
+	@HystrixCommand(fallbackMethod = "defaultFindOne")
 	@RequestMapping(value = "/savings/{number}", method = RequestMethod.GET) 
-	public ResponseEntity<?> findOne(
+	public ResponseEntity<?> findOneSavingAccount(
 			@PathVariable("number") Long number) {
 		logger.info("Returning saving account with number: " + number);
 		
@@ -62,10 +76,10 @@ public class Api {
 	}
 		
 	@RequestMapping(value = "/savings", method = RequestMethod.POST)
-	public ResponseEntity<?> createSavingsAccount(@RequestBody SavingsAccount client) {
-		logger.info("Creating cliente: " + client);
+	public ResponseEntity<?> createSavingsAccount(@RequestBody SavingsAccount savingsAccount) {
+		logger.info("Creating Savings Account: " + savingsAccount);
 		
-		SavingsAccount c = repository.save(client);
+		SavingsAccount c = repository.save(savingsAccount);
 		
 		return new ResponseEntity<>(c, HttpStatus.CREATED);
 	}
@@ -121,9 +135,83 @@ public class Api {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}	
 	
-	@RequestMapping(value = "/savings/{clientId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/savings/client/{clientId}", method = RequestMethod.GET)
 	public ResponseEntity<?> findSavingsAccountByClientId(@PathVariable("clientId") Long clientId) {
 		logger.info("Returning all savins account by client id:" + clientId);
 		return new ResponseEntity<>(repository.findByClientId(clientId), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/savings/{number}/tx", method = RequestMethod.GET) 
+	public ResponseEntity<?> transactionsBySavingsAccount(
+			@PathVariable("number") Long number) {
+		logger.info("Returning transaccionts of saving account with number: " + number);
+		
+		SavingsAccount sa = repository.findOne(number);
+		if(sa == null) {
+			logger.info("Returning saving account with number: " + number + " not found!");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		return new ResponseEntity<>(
+				txRepository.findBySavingsAccount(sa), 
+				HttpStatus.FOUND);
+	}
+	
+	@RequestMapping(value = "/savings/{number}/deposit", method = RequestMethod.POST) 
+	public ResponseEntity<?> depositFoundOnSavingsAccount(
+			@PathVariable("number") Long number,
+			@RequestBody BigDecimal amount) {
+		
+		logger.info("Depositing money on saving account with number: " + number);
+		
+		SavingsAccount sa = repository.findOne(number);
+		if(sa == null) {
+			logger.info("Returning saving account with number: " + number + " not found!");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		Transaction tx = sa.createDeposit(amount);
+		
+		txRepository.save(tx);
+		
+		logger.info("Balance: " + sa.getBalance());		
+		sa.applyTransaction(tx);
+		logger.info("Balance: " + sa.getBalance());
+		repository.saveAndFlush(sa);
+				
+		return new ResponseEntity<>(tx, HttpStatus.CREATED);
+	}
+			
+	@RequestMapping(value = "/savings/{number}/withdraw", method = RequestMethod.POST) 
+	public ResponseEntity<?> withdrawFoundOnSavingsAccount(
+			@PathVariable("number") Long number,
+			@RequestBody BigDecimal amount) {
+		
+		logger.info("Withdrawing money on saving account with number: " + number);
+		
+		SavingsAccount sa = repository.findOne(number);
+		if(sa == null) {
+			logger.info("Returning saving account with number: " + number + " not found!");
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		Transaction tx = sa.createWithdraw(amount);
+		
+		txRepository.save(tx);
+		sa.applyTransaction(tx);
+		repository.save(sa);
+		
+		return new ResponseEntity<>(tx, HttpStatus.CREATED);
+	}
+	
+	
+	// Fallback Methods -------------------------------------------------------
+	
+	public ResponseEntity<?> defaultFindAll() {
+		return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
+	}
+	
+	public ResponseEntity<?> defaultFindOne() {
+		return new ResponseEntity<>(SavingsAccount.DEFAULT, HttpStatus.OK);
 	}
 }

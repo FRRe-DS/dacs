@@ -21,8 +21,12 @@ import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Transaction implements Serializable {
@@ -35,10 +39,12 @@ public class Transaction implements Serializable {
 	// Properties -------------------------------------------------------------
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
-	private SavingsAccount account;
+	private SavingsAccount savingsAccount;
 	
 	private Date date;
 	
@@ -54,14 +60,6 @@ public class Transaction implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public SavingsAccount getAccount() {
-		return account;
-	}
-
-	public void setAccount(SavingsAccount account) {
-		this.account = account;
 	}
 
 	public Date getDate() {
@@ -86,5 +84,13 @@ public class Transaction implements Serializable {
 
 	public void setAmmount(BigDecimal ammount) {
 		this.ammount = ammount;
+	}
+
+	public SavingsAccount getSavingsAccount() {
+		return savingsAccount;
+	}
+
+	public void setSavingsAccount(SavingsAccount savingsAccount) {
+		this.savingsAccount = savingsAccount;
 	}
 }

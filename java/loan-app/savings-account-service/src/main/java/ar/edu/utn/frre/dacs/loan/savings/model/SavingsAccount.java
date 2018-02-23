@@ -17,12 +17,16 @@ package ar.edu.utn.frre.dacs.loan.savings.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class SavingsAccount implements Serializable {
@@ -31,6 +35,17 @@ public class SavingsAccount implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public static final SavingsAccount DEFAULT;
+	
+	// Constructos ------------------------------------------------------------
+
+	static {
+		DEFAULT = new SavingsAccount();
+		DEFAULT.setNumber(0L);
+		DEFAULT.setClientId(0L);
+		DEFAULT.setName("Def Sav Acc");
+	}	
 	
 	// Properties -------------------------------------------------------------
 	
@@ -41,10 +56,11 @@ public class SavingsAccount implements Serializable {
 	
 	private String name;
 	
-	private BigDecimal balance;
+	private BigDecimal balance = BigDecimal.ZERO;
 	
-	@OneToMany(mappedBy="account", fetch = FetchType.LAZY)
-	private Set<Transaction> transactions;
+	@JsonIgnore
+	@OneToMany(mappedBy="savingsAccount", fetch = FetchType.LAZY)
+	private Set<Transaction> transactions = new HashSet<Transaction>();
 
 	// Getters/Setters --------------------------------------------------------
 
@@ -76,10 +92,6 @@ public class SavingsAccount implements Serializable {
 		return balance;
 	}
 
-	public void setBalance(BigDecimal balance) {
-		this.balance = balance;
-	}
-
 	public Set<Transaction> getTransactions() {
 		return transactions;
 	}
@@ -88,4 +100,41 @@ public class SavingsAccount implements Serializable {
 		this.transactions = transactions;
 	}
 
+	public Transaction createDeposit(BigDecimal ammount) {
+		if(ammount == null || ammount.compareTo(BigDecimal.ZERO) <= 0)
+			throw new IllegalArgumentException("Invalid ammount: " + String.valueOf(ammount));
+		return createTransaction(ammount, TransactionType.CREDIT);
+	}
+
+	public Transaction createWithdraw(BigDecimal ammount) {
+		if(ammount == null || ammount.compareTo(BigDecimal.ZERO) <= 0)
+			throw new IllegalArgumentException("Invalid ammount: " + String.valueOf(ammount));
+		return createTransaction(ammount, TransactionType.DEBIT);
+	}
+	
+	private Transaction createTransaction(BigDecimal ammount, TransactionType type) {
+		Transaction tx = new Transaction();
+		
+		tx.setSavingsAccount(this);
+		tx.setDate(new Date());
+		tx.setType(type);
+		tx.setAmmount(ammount);
+		
+		return tx;		
+	}
+
+	public void applyTransaction(Transaction tx) {
+		if(tx == null)
+			throw new IllegalArgumentException("Invalid tx");
+		
+		switch (tx.getType()) {
+		case CREDIT:
+			this.balance = this.balance.add(tx.getAmmount());		
+			break;
+		case DEBIT:
+			this.balance = this.balance.subtract(tx.getAmmount());
+		default:
+			break;
+		}
+	}
 }

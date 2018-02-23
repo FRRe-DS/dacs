@@ -21,12 +21,13 @@ spring:
     name: savings-account-service
   jpa:
     show-sql: true
-    ddl-auto: validate
+    ddl-auto: update
+    open-in-view: true    
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
   datasource:
     url: jdbc:mysql://mysql02:3306/savings-account-db

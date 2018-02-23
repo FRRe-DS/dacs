@@ -32,6 +32,17 @@ public class Client implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	public static Client DEFAULT;
+	
+	// Constructos ------------------------------------------------------------
+
+	static {
+		DEFAULT = new Client();
+		DEFAULT.setId(0L);
+		DEFAULT.setFirstName("John");
+		DEFAULT.setLastName("Doe");
+	} 
 	
 	// Properties -------------------------------------------------------------
 	
