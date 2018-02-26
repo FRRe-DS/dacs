@@ -27,9 +27,9 @@ zuul:
     savings-account:
       path: /savings-account-service/**
       serviceId: savings-account-service
-#    compose-service:
-#      path: /greeting/**
-#      serviceId: greeting
+    scoring-service:
+      path: /scoring/**
+      serviceId: scoring-service
 
 ribbon:
   eureka:
