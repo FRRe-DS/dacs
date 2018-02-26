@@ -29,7 +29,7 @@
 		<module>eureka-server</module>
 		<module>client-service</module>
 		<module>savings-account-service</module>
-		<!-- module>checking-account-service</module -->
+		<module>scoring-service</module>
 		<module>api-gateway</module>
 		<module>hystrix-dashboard</module>
 		<module>turbine</module>

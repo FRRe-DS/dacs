@@ -40,6 +40,20 @@ services:
     networks:
       - loan-net
 
+  scoring-service:
+    build:
+      context:
+        ./scoring-service
+    ports:
+      - 8084:8084
+    restart: unless-stopped
+    depends_on:
+      - eureka-server
+    links:
+      - eureka-server
+    networks:
+      - loan-net
+
   mysql01:
     image: mysql:latest
     networks:
