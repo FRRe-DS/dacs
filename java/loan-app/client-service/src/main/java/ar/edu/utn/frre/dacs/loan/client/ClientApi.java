@@ -63,7 +63,7 @@ public class ClientApi {
 			logger.info("Returning client with id: " + id + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(client, HttpStatus.FOUND);
+		return new ResponseEntity<>(client, HttpStatus.OK);
 	}
 		
 	@RequestMapping(value = "/client", method = RequestMethod.POST)

@@ -15,14 +15,17 @@
  */
 package ar.edu.utn.frre.dacs.loan.scoring;
 
+import java.util.List;
+
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient(name = "client-service")
-public interface ClientService {
+@FeignClient(name = "savings-account-service")
+public interface SavingsAccountService {
+
+	@RequestMapping(value = "/savings/client/{clientId}", method = RequestMethod.GET)
+	List<SavingsAccount> findSavingsAccountByClientId(@PathVariable("clientId") Long clientId);
 	
-	@RequestMapping(value = "/client/{clientId}", method = RequestMethod.GET) 
-	public Client findOneClient(@PathVariable("clientId") Long id); 
 }

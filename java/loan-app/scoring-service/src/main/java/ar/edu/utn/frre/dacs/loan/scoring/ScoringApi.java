@@ -15,7 +15,10 @@
  */
 package ar.edu.utn.frre.dacs.loan.scoring;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,16 +26,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ScoringApi {
 	
+	private Logger logger = LoggerFactory.getLogger(ScoringApi.class.getName());
+	
 	@Autowired
 	private ScoringService scoringService;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/scoring/{clientId}/fico")
-	public ScoringRate ficoRate(Long clientId) throws ClientNotFoundException {
+	public ScoringRate ficoRate(@PathVariable("clientId") Long clientId) throws ClientNotFoundException {
+		
+		logger.info("Calling FICO Rate Service for client id: " + clientId);
+		
 		return scoringService.ficoRate(clientId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/scoring/{clientId}")
-	public Integer rate(Long clientId) throws ClientNotFoundException {
+	public Integer rate(@PathVariable("clientId") Long clientId) throws ClientNotFoundException {
+
+		logger.info("Calling Rate Service for client id: " + clientId);
+		
 		return scoringService.rate(clientId);
 	}
 }

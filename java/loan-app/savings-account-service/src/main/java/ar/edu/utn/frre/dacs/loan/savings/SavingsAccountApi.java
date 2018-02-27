@@ -72,7 +72,7 @@ public class SavingsAccountApi {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(sa, HttpStatus.FOUND);
+		return new ResponseEntity<>(sa, HttpStatus.OK);
 	}
 		
 	@RequestMapping(value = "/savings", method = RequestMethod.POST)

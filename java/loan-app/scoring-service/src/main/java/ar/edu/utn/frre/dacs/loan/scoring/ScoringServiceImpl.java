@@ -15,48 +15,57 @@
  */
 package ar.edu.utn.frre.dacs.loan.scoring;
 
+import java.util.List;
 import java.util.Random;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ScoringServiceImpl implements ScoringService {
-	
-	private Logger logger = LoggerFactory.getLogger(ScoringServiceImpl.class.getName());
 	
 	// Dependencies -----------------------------------------------------------
 	
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private SavingsAccountService savingsAccountService;
 
 	// Overrides --------------------------------------------------------------
 	
 	@HystrixCommand(fallbackMethod = "defaultFicoRate")
 	@Override
 	public ScoringRate ficoRate(Long clientId) throws ClientNotFoundException {
-		logger.info("FICO Rating client with id: " + clientId);
+		log.info("FICO Rating client with id: " + clientId);
+		
+		List<SavingsAccount> savings = savingsAccountService.findSavingsAccountByClientId(clientId);
+		
+		log.info("Savings Account: " + savings);
 		
 		Integer rate = rate(clientId);
 		
 		return ScoringRate.fromRate(rate);
 	}
 
-	@HystrixCommand(fallbackMethod = "defaultRate")
+	//@HystrixCommand(fallbackMethod = "defaultRate")
 	@Override
 	public Integer rate(Long clientId) throws ClientNotFoundException {
-		logger.info("Rating client with id: " + clientId);
+		log.info("Rating client with id: " + clientId);
 		
 		Client client = clientService.findOneClient(clientId);
 		
 		if(client == null) {
-			logger.warn("Client with id: " + clientId + " not found!" );
+			log.warn("Client with id: " + clientId + " not found!" );
 			throw new ClientNotFoundException(clientId);
 		}
+		
+		log.info("Client Returned: " + client);
 		
 		Random rdn = new Random();
 		return Integer.valueOf(300 + rdn.nextInt(550));
@@ -64,12 +73,12 @@ public class ScoringServiceImpl implements ScoringService {
 
 	
 	public ScoringRate defaultFicoRate(Long clientId) {
-		logger.error("This is a fallback");
+		log.error("This is a fallback");
 		return ScoringRate.VERY_POOR;
 	}
 	
 	public Integer defaultRate(Long clientId) {
-		logger.error("This is a fallback");
+		log.error("This is a fallback");
 		return Integer.valueOf(300);
 	}
 }

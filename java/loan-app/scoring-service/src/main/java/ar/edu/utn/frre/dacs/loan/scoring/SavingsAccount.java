@@ -15,6 +15,19 @@
  */
 package ar.edu.utn.frre.dacs.loan.scoring;
 
-public class ClientServiceFallback {
+import java.math.BigDecimal;
 
+import lombok.Data;
+
+@Data
+public class SavingsAccount {
+
+	private Long number;
+	
+	private Long clientId;
+	
+	private String name;
+	
+	private BigDecimal balance = BigDecimal.ZERO;
+	
 }
