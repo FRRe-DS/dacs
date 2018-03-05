@@ -53,7 +53,7 @@ public class ScoringServiceImpl implements ScoringService {
 		return ScoringRate.fromRate(rate);
 	}
 
-	//@HystrixCommand(fallbackMethod = "defaultRate")
+	@HystrixCommand(fallbackMethod = "defaultRate")
 	@Override
 	public Integer rate(Long clientId) throws ClientNotFoundException {
 		log.info("Rating client with id: " + clientId);
@@ -72,12 +72,12 @@ public class ScoringServiceImpl implements ScoringService {
 	}
 
 	
-	public ScoringRate defaultFicoRate(Long clientId) {
+	public ScoringRate defaultFicoRate(Long clientId) throws ClientNotFoundException {
 		log.error("This is a fallback");
 		return ScoringRate.VERY_POOR;
 	}
 	
-	public Integer defaultRate(Long clientId) {
+	public Integer defaultRate(Long clientId) throws ClientNotFoundException {
 		log.error("This is a fallback");
 		return Integer.valueOf(300);
 	}

@@ -17,6 +17,7 @@ package ar.edu.utn.frre.dacs.loan.client;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,17 +59,24 @@ public class ClientApi {
 			@PathVariable("clientId") Long id) {
 		logger.info("Returning client with id: " + id);
 		
-		Client client = repository.findOne(id);
-		if(client == null) {
+		if(id == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+		
+		Optional<Client> client = repository.findById(id);
+		
+		if(!client.isPresent()) {
 			logger.info("Returning client with id: " + id + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(client, HttpStatus.OK);
+		return new ResponseEntity<>(client.get(), HttpStatus.OK);
 	}
 		
 	@RequestMapping(value = "/client", method = RequestMethod.POST)
 	public ResponseEntity<?> createClient(@RequestBody Client client) {
 		logger.info("Creating cliente: " + client);
+		
+		if(client == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
 		Client c = repository.save(client);
 		
@@ -79,54 +87,57 @@ public class ClientApi {
 	public ResponseEntity<?> updateClient(@RequestBody Client client) {
 		logger.info("Updating cliente with id: " + client.getId());
 		
-		Client c = null;
-		
 		if(client.getId() != null)  {
-			c = repository.findOne(client.getId());
+			Optional<Client> opt = repository.findById(client.getId());
+			if(!opt.isPresent()) {
+				logger.info("Client: "+ client + " not found!");
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {
+				Client c = opt.get();
+				
+				c.setFirstName(client.getFirstName());
+				c.setLastName(client.getLastName());
+				c.setDateOfBirth(client.getDateOfBirth());
+				
+				repository.save(c);
+				
+				return new ResponseEntity<>(c, HttpStatus.OK);
+			}
 		}
 		
-		if(c == null) {
-			logger.info("Client: "+ client + " not found!");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-		
-		c.setFirstName(client.getFirstName());
-		c.setLastName(client.getLastName());
-		c.setDateOfBirth(client.getDateOfBirth());
-		
-		repository.save(c);
-		
-		return new ResponseEntity<>(c, HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 	}
 	
 	@RequestMapping(value = "/client", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteClient(@RequestBody Client client) {
 		logger.info("Deleting cliente: " + client);
 
-		Client c = repository.findOne(client.getId());
-		
-		if(c == null) {
-			logger.info("Client: "+ client + " not found!");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		repository.delete(c);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
+		if(client.getId() != null)  {
+			Optional<Client> opt = repository.findById(client.getId());
+			if(!opt.isPresent()) {				
+				logger.info("Client: "+ client + " not found!");
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			} else {
+				repository.delete(opt.get());				
+				return new ResponseEntity<>(HttpStatus.OK);				
+			}			
+		}		
+		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 	}	
 
 	@RequestMapping(value = "/client/{clientId}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteClientById(@PathVariable("clientId") Long id) {
 		logger.info("Deleting cliente: " + id);
 		
-		if(!repository.exists(id)) {
+		if(id == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		
+		if(!repository.existsById(id)) {
 			logger.info("Client with id: "+ id + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		Client client = repository.findOne(id);
-		repository.delete(client);
-		
+		repository.deleteById(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}	
 	

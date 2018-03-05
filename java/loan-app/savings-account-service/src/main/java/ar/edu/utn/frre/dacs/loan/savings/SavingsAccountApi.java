@@ -17,6 +17,7 @@ package ar.edu.utn.frre.dacs.loan.savings;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +68,16 @@ public class SavingsAccountApi {
 			@PathVariable("number") Long number) {
 		logger.info("Returning saving account with number: " + number);
 		
-		SavingsAccount sa = repository.findOne(number);
-		if(sa == null) {
+		if(number == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+		
+		Optional<SavingsAccount> sa = repository.findById(number);
+		
+		if(!sa.isPresent()) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(sa, HttpStatus.OK);
+		return new ResponseEntity<>(sa.get(), HttpStatus.OK);
 	}
 		
 	@RequestMapping(value = "/savings", method = RequestMethod.POST)
@@ -88,49 +93,40 @@ public class SavingsAccountApi {
 	public ResponseEntity<?> updateSavingsAccount(@RequestBody SavingsAccount savingsAccount) {
 		logger.info("Updating saving account with number: " + savingsAccount.getNumber());
 		
-		SavingsAccount sa = null;
+		if(savingsAccount == null || savingsAccount.getNumber() == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		if(savingsAccount.getNumber() != null)  {
-			sa = repository.findOne(savingsAccount.getNumber());
+		if(!repository.existsById(savingsAccount.getNumber())) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 		
-		if(sa == null) {
-			logger.info("SavingsAccount: "+ sa + " not found!");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		repository.save(savingsAccount);
 		
-		repository.save(sa);
-		
-		return new ResponseEntity<>(sa, HttpStatus.OK);
+		return new ResponseEntity<>(savingsAccount, HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/savings", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteSavingsAccount(@RequestBody SavingsAccount savingsAccount) {
 		logger.info("Deleting cliente: " + savingsAccount);
 
-		SavingsAccount c = repository.findOne(savingsAccount.getNumber());
+		if(savingsAccount == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		if(c == null) {
-			logger.info("SavingsAccount: "+ savingsAccount + " not found!");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-
-		repository.delete(c);
-		
-		return new ResponseEntity<>(HttpStatus.OK);
+		return deleteSavingsAccountById(savingsAccount.getNumber());		
 	}	
 
 	@RequestMapping(value = "/savings/{number}", method = RequestMethod.DELETE)
 	public ResponseEntity<?> deleteSavingsAccountById(@PathVariable("number") Long number) {
 		logger.info("Deleting Savins Account with number: " + number);
-		
-		if(!repository.exists(number)) {
-			logger.info("SavingsAccount with number: "+ number + " not found!");
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+		if(number == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+
+		if(!repository.existsById(number)) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 		
-		SavingsAccount client = repository.findOne(number);
-		repository.delete(client);
+		repository.deleteById(number);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}	
@@ -138,6 +134,10 @@ public class SavingsAccountApi {
 	@RequestMapping(value = "/savings/client/{clientId}", method = RequestMethod.GET)
 	public ResponseEntity<?> findSavingsAccountByClientId(@PathVariable("clientId") Long clientId) {
 		logger.info("Returning all savins account by client id:" + clientId);
+		
+		if(clientId == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+		
 		return new ResponseEntity<>(repository.findByClientId(clientId), HttpStatus.OK);
 	}
 	
@@ -145,15 +145,19 @@ public class SavingsAccountApi {
 	public ResponseEntity<?> transactionsBySavingsAccount(
 			@PathVariable("number") Long number) {
 		logger.info("Returning transaccionts of saving account with number: " + number);
+	
+		if(number == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		SavingsAccount sa = repository.findOne(number);
-		if(sa == null) {
+		Optional<SavingsAccount> opt = repository.findById(number);
+		
+		if(!opt.isPresent()) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return new ResponseEntity<>(
-				txRepository.findBySavingsAccount(sa), 
+				txRepository.findBySavingsAccount(opt.get()), 
 				HttpStatus.FOUND);
 	}
 	
@@ -164,12 +168,19 @@ public class SavingsAccountApi {
 		
 		logger.info("Depositing money on saving account with number: " + number);
 		
-		SavingsAccount sa = repository.findOne(number);
-		if(sa == null) {
+		if(number == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+		if(amount == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+		
+		Optional<SavingsAccount> opt = repository.findById(number);
+		
+		if(!opt.isPresent()) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
+		SavingsAccount sa = opt.get();
 		Transaction tx = sa.createDeposit(amount);
 		
 		txRepository.save(tx);
@@ -188,13 +199,20 @@ public class SavingsAccountApi {
 			@RequestBody BigDecimal amount) {
 		
 		logger.info("Withdrawing money on saving account with number: " + number);
+
+		if(number == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
+		if(amount == null)
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		SavingsAccount sa = repository.findOne(number);
-		if(sa == null) {
+		Optional<SavingsAccount> opt = repository.findById(number);
+		
+		if(!opt.isPresent()) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
+		SavingsAccount sa = opt.get();
 		Transaction tx = sa.createWithdraw(amount);
 		
 		txRepository.save(tx);
