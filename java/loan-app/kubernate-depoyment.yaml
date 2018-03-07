@@ -1,57 +1,94 @@
 ---
+kind: PersistentVolume
 apiVersion: v1
-kind: Service
 metadata:
-  name: mysql
+  name: mysql01-pv
+  labels:
+    type: local
+    app: loan-app
 spec:
-  ports:
-  - port: 3306
-  selector:
-    app: mysql
-  clusterIP: None
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/data01"
+
 ---
-apiVersion: v1
 kind: PersistentVolumeClaim
+apiVersion: v1
 metadata:
-  name: mysql-pv-claim
+  name: mysql01-pvc
+  labels:
+    app: loan-app
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 20Gi
+      storage: 3Gi
+
 ---
-apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  name: mysql
+  name: loan-app-eureka-server
 spec:
   selector:
     matchLabels:
-      app: mysql
+      app: loan-app
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: mysql
+        app: loan-app
     spec:
       containers:
-      - image: mysql:latest
-        name: mysql
-        env:
-          # Use secret in real usage
-        - name: MYSQL_ROOT_PASSWORD
-          value: ThePassword
-        - name: MYSQL_DATABASE
-          value: client-db          
+      - image: dtr.nbchad.local/d97villaje/eureka-server:v0.1
+        name: eureka-server
         ports:
-        - containerPort: 3306
-          name: mysql
+        - containerPort: 8761
+
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: loan-app-client-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: loan-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: loan-app
+    spec:
+      containers:
+      - image: dtr.nbchad.local/d97villaje/client-service:v0.1
+        name: client-service
+        ports:
+          - containerPort: 8082
+      - image: mysql:latest
+        name: mysql01
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mysql01-pass
+              key: password
+        - name: MYSQL_DATABASE
+          value: client-db
+        ports:
+          - containerPort: 3306
+            name: mysql
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql01-persistent-storage
           mountPath: /var/lib/mysql
       volumes:
-      - name: mysql-persistent-storage
+      - name: mysql01-persistent-storage
         persistentVolumeClaim:
-          claimName: mysql-pv-claim
+          claimName: mysql01-pvc
