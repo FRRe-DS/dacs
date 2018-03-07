@@ -32,6 +32,8 @@
 		<module>greeting</module>
 		<module>api-gateway</module>
 		<module>zipkin-server</module>
+		<module>turbine</module>
+		<module>hystrix-dashboard</module>
 	</modules>
 
 	<!-- Licenses -->
