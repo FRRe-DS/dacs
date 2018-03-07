@@ -4,7 +4,20 @@ Desarrollo de Aplicaciones Cliente-Servidor
 Microservices
 --------------------------
 
-  `mvn clean install && docker-compose up --build`
+### Docker
+
+Start building docker images for every services, simply run following command on root directory
+
+```shell
+mvn clean install
+```
+Launch services using `docker-compose`
+
+```shell
+docker-compose up --build -d
+```
+
+Explore services at:
 
   - Eureka Server: `http://localhost:8761`
   - Edge Server: `http://localhost:8765`

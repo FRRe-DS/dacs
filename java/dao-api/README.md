@@ -5,5 +5,7 @@ Mapeo de Objetos a Relacional con Java Persistence API
 -
 
 Build
--
-$ mvn clean package
+
+```shell
+mvn clean package
+```

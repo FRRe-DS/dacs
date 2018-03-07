@@ -11,10 +11,13 @@ Para el ejemplo se modela el siguiente escenario:
 Crear las estructuras de datos para administrar los datos **filiatorios** de un cliente y las **direcciones** del mismo.
 
 Build
--
-$ mvn clean package
+
+```shell
+mvn clean package
+```
 
 Run
--
 
-$ java -jar target/perisitencia-jpa-jar-with-dependencies.jar
+```shell
+java -jar target/perisitencia-jpa-jar-with-dependencies.jar
+```
