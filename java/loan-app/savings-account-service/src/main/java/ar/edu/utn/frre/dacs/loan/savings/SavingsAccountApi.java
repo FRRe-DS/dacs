@@ -17,7 +17,6 @@ package ar.edu.utn.frre.dacs.loan.savings;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,13 +70,13 @@ public class SavingsAccountApi {
 		if(number == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		Optional<SavingsAccount> sa = repository.findById(number);
+		SavingsAccount sa = repository.findOne(number);
 		
-		if(!sa.isPresent()) {
+		if(sa == null) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(sa.get(), HttpStatus.OK);
+		return new ResponseEntity<>(sa, HttpStatus.OK);
 	}
 		
 	@RequestMapping(value = "/savings", method = RequestMethod.POST)
@@ -96,7 +95,7 @@ public class SavingsAccountApi {
 		if(savingsAccount == null || savingsAccount.getNumber() == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		if(!repository.existsById(savingsAccount.getNumber())) {
+		if(!repository.exists(savingsAccount.getNumber())) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 		
@@ -122,11 +121,11 @@ public class SavingsAccountApi {
 		if(number == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 
-		if(!repository.existsById(number)) {
+		if(!repository.exists(number)) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 		}
 		
-		repository.deleteById(number);
+		repository.delete(number);
 		
 		return new ResponseEntity<>(HttpStatus.OK);
 	}	
@@ -149,15 +148,15 @@ public class SavingsAccountApi {
 		if(number == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		Optional<SavingsAccount> opt = repository.findById(number);
+		SavingsAccount sa = repository.findOne(number);
 		
-		if(!opt.isPresent()) {
+		if(sa == null) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
 		return new ResponseEntity<>(
-				txRepository.findBySavingsAccount(opt.get()), 
+				txRepository.findBySavingsAccount(sa), 
 				HttpStatus.FOUND);
 	}
 	
@@ -173,14 +172,13 @@ public class SavingsAccountApi {
 		if(amount == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		Optional<SavingsAccount> opt = repository.findById(number);
+		SavingsAccount sa = repository.findOne(number);
 		
-		if(!opt.isPresent()) {
+		if(sa == null) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		SavingsAccount sa = opt.get();
 		Transaction tx = sa.createDeposit(amount);
 		
 		txRepository.save(tx);
@@ -205,14 +203,13 @@ public class SavingsAccountApi {
 		if(amount == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
 		
-		Optional<SavingsAccount> opt = repository.findById(number);
+		SavingsAccount sa = repository.findOne(number);
 		
-		if(!opt.isPresent()) {
+		if(sa == null) {
 			logger.info("Returning saving account with number: " + number + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		SavingsAccount sa = opt.get();
 		Transaction tx = sa.createWithdraw(amount);
 		
 		txRepository.save(tx);

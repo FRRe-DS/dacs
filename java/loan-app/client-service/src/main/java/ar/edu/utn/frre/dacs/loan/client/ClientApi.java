@@ -17,7 +17,6 @@ package ar.edu.utn.frre.dacs.loan.client;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,14 +60,13 @@ public class ClientApi {
 		
 		if(id == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);		
-		
-		Optional<Client> client = repository.findById(id);
-		
-		if(!client.isPresent()) {
+			
+		Client client = repository.findOne(id);
+		if(client == null) {
 			logger.info("Returning client with id: " + id + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return new ResponseEntity<>(client.get(), HttpStatus.OK);
+		return new ResponseEntity<>(client, HttpStatus.OK);
 	}
 		
 	@RequestMapping(value = "/client", method = RequestMethod.POST)
@@ -88,13 +86,12 @@ public class ClientApi {
 		logger.info("Updating cliente with id: " + client.getId());
 		
 		if(client.getId() != null)  {
-			Optional<Client> opt = repository.findById(client.getId());
-			if(!opt.isPresent()) {
+			Client c = repository.findOne(client.getId());
+			
+			if(c == null) {
 				logger.info("Client: "+ client + " not found!");
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {
-				Client c = opt.get();
-				
 				c.setFirstName(client.getFirstName());
 				c.setLastName(client.getLastName());
 				c.setDateOfBirth(client.getDateOfBirth());
@@ -113,12 +110,11 @@ public class ClientApi {
 		logger.info("Deleting cliente: " + client);
 
 		if(client.getId() != null)  {
-			Optional<Client> opt = repository.findById(client.getId());
-			if(!opt.isPresent()) {				
+			if(!repository.exists(client.getId())) {				
 				logger.info("Client: "+ client + " not found!");
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			} else {
-				repository.delete(opt.get());				
+				repository.delete(client.getId());				
 				return new ResponseEntity<>(HttpStatus.OK);				
 			}			
 		}		
@@ -132,12 +128,12 @@ public class ClientApi {
 		if(id == null)
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		
-		if(!repository.existsById(id)) {
+		if(!repository.exists(id)) {
 			logger.info("Client with id: "+ id + " not found!");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		repository.deleteById(id);
+		repository.delete(id);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}	
 	
