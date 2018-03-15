@@ -10,3 +10,7 @@ matrix:
         - "7"
       before_script:
         - cd node
+    - language: java
+      jdk: oraclejdk8
+      before_script:
+        - cd java/loan-app
