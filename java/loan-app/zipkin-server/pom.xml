@@ -7,8 +7,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>zipkin-server</name>
-	<description>Demo project for Spring Boot</description>
+	<name>Zipkin Server</name>
 
 	<parent>
 		<groupId>ar.edu.utn.frre.dacs</groupId>
@@ -17,6 +16,11 @@
 	</parent>
 
 	<dependencies>
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter</artifactId>
+	    </dependency>
+	
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-sleuth-zipkin-stream</artifactId>
@@ -38,11 +42,19 @@
 			<artifactId>zipkin-server</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	    <dependency>
+	        <groupId>io.zipkin.java</groupId>
+	        <artifactId>zipkin-autoconfigure-storage-mysql</artifactId>
+	    </dependency>
 
+	    <dependency>
+	        <groupId>mysql</groupId>
+	        <artifactId>mysql-connector-java</artifactId>
+	    </dependency>
+	    
+	    <dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-jdbc</artifactId>
+	    </dependency>
+	</dependencies>
 </project>

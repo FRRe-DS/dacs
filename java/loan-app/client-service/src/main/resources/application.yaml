@@ -28,6 +28,11 @@ spring:
     hibernate:
       ddl-auto: update
       naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+  rabbitmq:
+    host: rabbit
+    port: 5672
+    username: guest
+    password: guest  
   datasource:
     url: jdbc:mysql://mysql01:3306/client-db
     username: root

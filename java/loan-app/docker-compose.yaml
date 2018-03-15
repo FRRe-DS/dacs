@@ -1,5 +1,13 @@
 version: '3'
 services:
+  rabbit:
+    image: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - loan-net
+
   eureka-server:
     build:
       context:
@@ -20,8 +28,9 @@ services:
     depends_on:
       - eureka-server
     links:
-      - eureka-server
-      - mysql01
+      - eureka-server:eureka-server
+      - mysql01:mysql01
+      - rabbit:rabbit
     networks:
       - loan-net
 
@@ -37,6 +46,7 @@ services:
     links:
       - eureka-server
       - mysql02
+      - rabbit:rabbit
     networks:
       - loan-net
 
@@ -51,6 +61,7 @@ services:
       - eureka-server
     links:
       - eureka-server
+      - rabbit:rabbit
     networks:
       - loan-net
 
@@ -74,6 +85,16 @@ services:
     volumes:
       - mysql02-volume:/var/lib/mysql
 
+  mysql03:
+    image: mysql:latest
+    networks:
+      - loan-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=ThePassword
+      - MYSQL_DATABASE=zipkin
+    volumes:
+      - mysql03-volume:/var/lib/mysql
+
   # Zuul API Gateway
   api-gateway:
     build:
@@ -96,6 +117,8 @@ services:
     ports:
       - 9411:9411
     restart: unless-stopped
+    links:
+      - rabbit:rabbit
     networks:
       - loan-net
 
@@ -134,3 +157,4 @@ networks:
 volumes:
   mysql01-volume:
   mysql02-volume:
+  mysql03-volume:
