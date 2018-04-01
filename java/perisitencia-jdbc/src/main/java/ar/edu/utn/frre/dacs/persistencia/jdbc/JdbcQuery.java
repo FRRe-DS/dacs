@@ -29,6 +29,16 @@ import java.sql.Statement;
 public class JdbcQuery {
 
 	/**
+	 * docker run --name mysql01    -p 3306:3306    -e MYSQL_ROOT_PASSWORD=password    -e MYSQL_USER=dacs   -e MYSQL_PASSWORD=dacs \ -e MYSQL_DATABASE=dacs    -d mysql
+	 *   
+	 *   CREATE TABLE provincia (
+	 *   	id 		BIGINT 		AUTO_INCREMENT PRIMARY KEY,
+	 *   	nombre 	VARCHAR(50) NOT NULL
+	 *   )
+	 *   INSERT INTO provincia(nombre) VALUES("Chaco");
+	 *   INSERT INTO provincia(nombre) VALUES("Corrientes");
+	 *   INSERT INTO provincia(nombre) VALUES("Misiones");
+	 *   INSERT INTO provincia(nombre) VALUES("Formosa");
 	 * @param args
 	 */
 	public static void main(String[] args) {

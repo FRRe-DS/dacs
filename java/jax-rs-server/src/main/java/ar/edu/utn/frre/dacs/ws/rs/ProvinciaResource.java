@@ -43,7 +43,7 @@ public class ProvinciaResource {
 	private static final Provincia createChaco() {
 		Provincia provincia = new Provincia();
 		provincia.setId(1L);
-		provincia.setNombre("Chaco");
+		provincia.setNombre("Corrientes");
 		return provincia;
 	}
 }
