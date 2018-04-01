@@ -45,9 +45,8 @@
 		<module>perisitencia-jdbc</module>
 		<module>perisitencia-jpa</module>
 		<module>dao-api</module>
-		<!-- 
 		<module>jax-ws-server</module>
-		 -->
+		<module>jax-ws-client</module>
 		<module>jax-rs-server</module>
 	</modules>
 
