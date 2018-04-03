@@ -24,7 +24,7 @@ import ar.edu.utn.frre.dacs.model.Sexo;
  * <h2>Validador de CUIT/CUIL.</h2> Valida que el CUIT/CUIL posea un formato
  * correcto.
  *
- * @author <a href="mailto:jorge.villaverde@nbch.com.ar">Jorge E. Villaverde</a>
+ * @author <a href="mailto:jorgevillaverde@gmail.com">Jorge E. Villaverde</a>
  * @version 1.0.0
  * @since 1.0.0
  */
