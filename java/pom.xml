@@ -49,6 +49,7 @@
 		<module>jax-ws-client</module>
 		<module>jax-rs-server</module>
 		<module>jax-rs-client</module>
+		<module>jms</module>
 	</modules>
 
 	<developers>
