@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.dao;
+package ar.edu.utn.frre.dacs.jms;
 
-import ar.edu.utn.frre.dacs.model.Cliente;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 /**
- * Data Access Object para Clientes.
- * @author Jorge Villaverde
- * @version 1.0
- * @see <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/DataAccessObject.html">Core J2EE Patterns - Data Access Object</a>
+ * Configuración de los recursos JAX-RS
+ * @author Dr. Jorge Eduardo Villaverde
+ *
  */
-public interface ClienteDao extends DataAccessObject<Cliente, Long> {
+@ApplicationPath("resources")
+public class JAXRSConfiguration extends Application {
 
 }

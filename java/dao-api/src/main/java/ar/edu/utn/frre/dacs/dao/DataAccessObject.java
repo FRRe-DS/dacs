@@ -15,6 +15,8 @@
  */
 package ar.edu.utn.frre.dacs.dao;
 
+import java.io.Serializable;
+
 import javax.persistence.EntityNotFoundException;
 
 import ar.edu.utn.frre.dacs.model.BaseEntity;
@@ -24,7 +26,7 @@ import ar.edu.utn.frre.dacs.model.BaseEntity;
  * @author Dr. Jorge Villaverde
  * @version 1.0
  */
-public interface DataAccessObject<T extends BaseEntity> {
+public interface DataAccessObject<T extends BaseEntity, PK extends Serializable> {
 
 	/**
 	 * Busca a una Entidad por su Id.
@@ -33,5 +35,5 @@ public interface DataAccessObject<T extends BaseEntity> {
 	 * @throws EntityNotFoundException Lanzada si no se encuentra la entidad 
 	 * con el id. 
 	 */
-	T findById(Long id) throws EntityNotFoundException;
+	T findById(PK id) throws EntityNotFoundException;
 }

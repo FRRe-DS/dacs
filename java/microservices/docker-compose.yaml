@@ -23,8 +23,8 @@ services:
     build:
       context:
         ./service-a
-    ports:
-      - 8083:8083
+#    ports:
+#      - 8083:8083
     restart: unless-stopped
     depends_on:
       - eureka-server

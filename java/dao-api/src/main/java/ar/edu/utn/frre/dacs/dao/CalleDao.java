@@ -23,6 +23,6 @@ import ar.edu.utn.frre.dacs.model.Calle;
  * @version 1.0
  * @see ar.edu.utn.frre.dacs.model.Calle
  */
-public interface CalleDao extends DataAccessObject<Calle> {
+public interface CalleDao extends DataAccessObject<Calle, Long> {
 
 }

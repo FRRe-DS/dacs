@@ -1,5 +1,7 @@
-FROM java:8
-ADD target/api-gateway.jar app.jar
-RUN bash -c 'touch /app.jar'
+FROM openjdk:8-jre-alpine
+
+COPY target/api-gateway.jar /app.jar
+
 EXPOSE 8765
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
+
+CMD ["java", "-Xmx768M", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "/app.jar"]

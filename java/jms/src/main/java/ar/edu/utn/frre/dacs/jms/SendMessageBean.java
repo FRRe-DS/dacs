@@ -56,11 +56,11 @@ public class SendMessageBean implements Serializable {
 	
 	// Properties -------------------------------------------------------------
 	
-	private String message;
+	//private String message;
 	
 	// Methods ----------------------------------------------------------------
 	
-	public void sendMessage() {
+	public void sendMessage(String message) {
 		Connection connection = null;
 		Session session = null;
 		MessageProducer producer = null;
@@ -106,12 +106,12 @@ public class SendMessageBean implements Serializable {
 
 	// Getters/Setters --------------------------------------------------------
 	
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
+//	public String getMessage() {
+//		return message;
+//	}
+//
+//	public void setMessage(String message) {
+//		this.message = message;
+//	}
 
 }

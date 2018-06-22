@@ -13,16 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ar.edu.utn.frre.dacs.dao;
-
-import ar.edu.utn.frre.dacs.model.Cliente;
-
 /**
- * Data Access Object para Clientes.
- * @author Jorge Villaverde
- * @version 1.0
- * @see <a href="http://java.sun.com/blueprints/corej2eepatterns/Patterns/DataAccessObject.html">Core J2EE Patterns - Data Access Object</a>
+ * @author Dr. Jorge E. Villaverde
+ *
  */
-public interface ClienteDao extends DataAccessObject<Cliente, Long> {
-
-}
+package ar.com.edu.nbch.frre.dacs.model;
